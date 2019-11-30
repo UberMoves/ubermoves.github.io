@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Uber-Moves</title>
+    <link rel="icon" href="assets/logo.png">
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://d3js.org/d3-force.v2.min.js"></script>
+    <link rel="stylesheet" href="thirdparty/maptalks/maptalks.css">
+    <script type="text/javascript" src="thirdparty/maptalks/maptalks.js"></script>
+    <script type="text/javascript" src="thirdparty/maptalks/maptalks.d3.js"></script>
+    <script type="text/javascript" src="thirdparty/maptalks/maptalks.heatmap.js"></script>
+    <script type="text/javascript" src="thirdparty/maptalks/maptalks.markercluster.js"></script>
+    <link href="thirdparty/tabulator-master/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="thirdparty/tabulator-master/dist/js/tabulator.min.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl">
+                <div class="row">
+                    <div class="card my-card">
+                        <h5 class="card-header my-header-padding">Map Viewport</h5>
+                        <div class="card-body my-body-padding" id="mapContainer">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card my-card">
+                        <h5 class="card-header my-header-padding">Selection Charts</h5>
+                        <div id="bars" class="card-body my-body-padding">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col my-col">
+                <div class="row">
+                    <div class="card-group">
+                        <div class="card">
+                            <h5 class="card-header my-header-padding">Day of Week Filter</h5>
+                            <div id="weekDaySlider" class="card-body my-body-padding">
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h5 class="card-header my-header-padding">Hour Filter</h5>
+                            <div id="hourSlider" class="card-body my-body-padding">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <h5 class="card-header my-header-padding">Selection Table</h5>
+                        <div id="tableContainer" class="card-body my-body-padding">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card my-card">
+                        <h5 class="card-header my-header-padding">Preset</h5>
+                        <div id="preset" class="card-body my-body-padding">
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapseOne" aria-expanded="true"
+                                                aria-controls="collapseOne">
+                                                Preset 1
+                                            </button>
+                                        </h2>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                                        data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="card my-card">
+                                                <img src="assets/preset1.png" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Soho</h5>
+                                                    <p>Image from <a href="https://www.timeout.com/newyork/manhattan/soho-manhattan-neighborhood-guide">timeout.com</a></p>
+                                                    <p class="card-text">Some quick example text to build on the card
+                                                        title and make up the bulk of the card's content.</p>
+                                                    <a id="preset1" href="#" class="btn btn-primary">Go there</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                                data-target="#collapseTwo" aria-expanded="false"
+                                                aria-controls="collapseTwo">
+                                                Preset 2
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                        data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="card my-card">
+                                                <img src="assets/preset2.png" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Upper East Side</h5>
+                                                    <p>Image from <a href="https://www.nytimes.com/2014/03/16/realestate/for-starters-the-upper-east-side.html">nytimes.com</a></p>
+                                                    <p class="card-text">Some quick example text to build on the card
+                                                        title and make up the bulk of the card's content.</p>
+                                                    <a id="preset2" href="#" class="btn btn-primary">Go there</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingThree">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                                data-target="#collapseThree" aria-expanded="false"
+                                                aria-controls="collapseThree">
+                                                Preset 3
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                        data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="card my-card">
+                                                <img src="assets/preset3.png" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Card title</h5>
+                                                    <p>Image from <a href="https://www.timeout.com/newyork/manhattan/chelsea-manhattan-neighborhood-guide">timeout.com</a></p>
+                                                    <p class="card-text">Some quick example text to build on the card
+                                                        title and make up the bulk of the card's content.</p>
+                                                    <a id="preset3" href="#" class="btn btn-primary">Go there</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/component/circularslider.js"></script>
+    <script src="js/component/brushslider.js"></script>
+    <script src="js/appmanager.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/bars.js"></script>
+    <script src="js/table.js"></script>
+</body>
+
+</html>
