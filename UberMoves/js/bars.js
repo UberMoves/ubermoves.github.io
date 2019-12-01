@@ -80,7 +80,13 @@ class Bars {
             
         
 
-        let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
+        //let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
+        //let color =["#F5CBA7","#F9E79F","#A3E4D7","#AED6F1","#D2B4DE","#F5B7B1","#F5B7B1"];
+         let color =["#F1C40F","#27AE60","#1ABC9C","#2980B9","#9B59B6","#5D6D7E","#EB984E"];
+       // let color =["#16A085","#34495E","#5499C7","#5D6D7E","#EC7063","#5D6D7E","#AF7AC5"];
+
+
+
          let dow_hour_ID = d3.selectAll('body').select('#svg3').append('g').attr("id","dow-hour-id").selectAll("rect");
    /*      dow_hour_ID.data(dow).enter().append("rect")
         .attr("x", (d,i) => 60 + i*45)
@@ -94,10 +100,53 @@ class Bars {
         dow_hour_ID.data(dow).enter().append("text")
 
          .attr("x", (d,i)=> 70 + i * 45)
-        .attr("y", 10)
+        .attr("y", 30)
         .attr("dy", ".35em")
+        .style("font-size", "16px")
         .text((d,i)=> dow[i])
-        .style('fill', (d,i)=>color[i]);
+        .style('fill', (d,i)=>color[i])
+        .on("mouseover", function(d,i){
+             d3.select(this).style("font-size", "20px")
+           let line= d3.select("#svg3").select("#gline3").select("#" + "path" + i);
+                 line.attr("stroke-width", "2")
+                 .style("stroke-opacity", 1) // set the stroke opacity
+            for(var j=0;j<7;j++)
+            {
+                if(j!=i)
+                {
+                let line= d3.select("#svg3").select("#gline3").select("#" + "path" + j);
+                 line.attr("stroke-width", "1.5")
+                 .style("stroke-opacity", .2) // set the stroke opacity
+                }
+            }
+
+
+
+        })
+        .on("mouseout", function(d,i){
+             d3.select(this).style("font-size", "16px")
+             let line= d3.select("#svg3").select("#gline3").select("#" + "path" + i);
+                  line.attr("stroke-width", "1.5")
+
+                  for(var j=0;j<7;j++)
+            {
+             
+                {
+                let line= d3.select("#svg3").select("#gline3").select("#" + "path" + j);
+                 line.attr("stroke-width", "1.5")
+                 .style("stroke-opacity", 1) // set the stroke opacity
+                }
+            }
+
+        })
+
+
+       d3.selectAll('body').select('#svg3').append("text")
+        .attr("x", 170)
+       .attr("y", 10)
+       .attr("dy", ".35em")
+       .text("All Pickups")
+       .style('fill', 'black');
 
 
 
@@ -112,8 +161,9 @@ class Bars {
             }
 
 
-        this.updateBars();
-
+            this.bars_dow();
+        
+            this.bars_hourly();
          });
         
         this.updateBars();
@@ -121,6 +171,7 @@ class Bars {
 
     updateBars()
     {
+        console.log("what");
         this.bars_dow();
         
         this.bars_hourly();
@@ -635,7 +686,11 @@ dow_hourly()
         .x((d, i) =>  d.key*14 + 50)
         .y(function(d) { return 300-pickUpScale(d.value)});
 
-        let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
+        //let color =["#7bc0e4","#c96367","#cb85ab","#5d5d5d","#c0b987","#f5c987","#d94b4d"];
+       // let color =["#F5CBA7","#F9E79F","#A3E4D7","#AED6F1","#D2B4DE","#F5B7B1","#F5B7B1"];
+             let color =["#F1C40F","#27AE60","#1ABC9C","#2980B9","#9B59B6","#5D6D7E","#EB984E"];
+         //    let color =["#16A085","#34495E","#5499C7","#5D6D7E","#EC7063","#5D6D7E","#AF7AC5"];
+
 
     for(var i=0;i<dow_data.length;i++)
         {
@@ -646,7 +701,7 @@ dow_hourly()
 
 //console.log(data)
 
-let Xpath= d3.selectAll("#svg3").select("#gline3").append('path').attr("opacity",1)
+let Xpath= d3.selectAll("#svg3").select("#gline3").append('path').attr("id","path" + i).attr("opacity",1)
 .attr("transform","translate(0,0)")
 //.attr("stroke", "#086fad")
 .attr("stroke-width", "1.5")
@@ -727,7 +782,7 @@ filtByHourTimeArr(filteredArray) {
     this.bars_dow();
     this.bars_hourly();
 
-    this.dow_hourly();
+   // this.dow_hourly();
 }
 
 filtByWeekDayArr(filteredArray) {
@@ -851,7 +906,7 @@ filtByWeekDayArr(filteredArray) {
             this.bars_dow();
 
        this.bars_hourly();
-       this.dow_hourly();
+     //  this.dow_hourly();
 
 }
 
